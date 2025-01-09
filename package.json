@@ -1,0 +1,34 @@
+{
+  "name": "playwright-cucumber-typescript",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "npx ts-node src/helpers/reports/init.ts",
+    "test": "cross-env ENV=prod cucumber-js || true",
+    "test:login": "cross-env ENV=prod cucumber-js login",
+    "test:addToCart": "cucumber-js addToCart",
+    "test:failed": "cross-env ENV=prod cucumber-js p- rerun @rerun.txt",
+    "posttest": "npx ts-node src/helpers/reports/report.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@playwright/test": "^1.49.1",
+    "fs-extra": "^11.2.0",
+    "playwright": "^1.49.1",
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^9.5.1",
+    "@types/node": "^22.10.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
+    "extra": "^0.2.1",
+    "fs-": "^1.0.0",
+    "multiple-cucumber-html-reporter": "^3.8.0",
+    "ts-node": "^10.9.2",
+    "winston": "^3.17.0"
+  }
+}
