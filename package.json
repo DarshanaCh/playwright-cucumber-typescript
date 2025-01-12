@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "pretest": "npx ts-node src/helpers/reports/init.ts",
-    "test": "cross-env ENV=prod cucumber-js || true",
+    "test": "cross-env ENV=prod FORCE_COLOR=0 cucumber-js --config=config/cucumber.js || true",
     "test:login": "cross-env ENV=prod cucumber-js login",
     "test:addToCart": "cucumber-js addToCart",
     "test:failed": "cross-env ENV=prod cucumber-js p- rerun @rerun.txt",
