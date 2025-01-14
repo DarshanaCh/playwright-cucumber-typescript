@@ -6,7 +6,7 @@ headless: false ,
 
 }
 export const invokeBrowser = async()  => {
-const browserType = process.env.BROWSER
+const browserType = process.env.BROWSER || "chrome"
     switch(browserType){
         case "chrome":
            return chromium.launch(options);

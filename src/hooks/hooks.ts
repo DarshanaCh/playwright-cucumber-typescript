@@ -21,6 +21,7 @@ Before(async ({pickle}) => {
           dir: "test-results/videos",
         },
   }); //context like tab of the browser
+
   await context.tracing.start({
     name: scenarioName,
     title: pickle.name,
@@ -31,51 +32,25 @@ Before(async ({pickle}) => {
   pageFixure.page = page;
   pageFixure.logger= createLogger(options(scenarioName))
 });
-///After step will be used for all steps screen shot
-// After(async function ({ pickle, result }) {
-//   //pickle is scenario name
-//   // attached screen shot -- only for failed test cases - if we like for all the steps screen shot then remove if statement
-//   if (result?.status == Status.FAILED) {
-//     const img = await pageFixure.page.screenshot({
-//       path: `./test-results/screenshots/${pickle.name}.png`,
-//       type: "png",
-//     });
-//     await this.attach(img, "image/png");
-//   }// this is for only failed scenario attachment if statemenet
+Before("@auth",async ({pickle}) => {
+  const scenarioName = pickle.name + pickle.id
+  context = await browser.newContext({
+        storageState: getStorageState(pickle.name),
+        recordVideo: {
+          dir: "test-results/videos",
+        },
+  }); //context like tab of the browser
 
-//   await pageFixure.page.close();
-//   await context.close();
-// });
-
-// After(async function ({ pickle, result }) {
-//   let videoPath: string;
-//   let img: Buffer;
-//   const path = `./test-results/trace/${pickle.id}.zip`;
-//   if (result?.status == Status.PASSED) {
-//       img = await pageFixure.page.screenshot(
-//           { path: `./test-results/screenshots/${pickle.name}.png`, type: "png" })
-//       videoPath = await pageFixure.page.video().path();
-//   } 
-//   await context.tracing.stop({ path: path });
-//   await pageFixure.page.close();
-//   await context.close();
-//   if (result?.status == Status.PASSED) {
-//       await this.attach(
-//           img, "image/png"
-//       );
-//       await this.attach(
-//           fs.readFileSync(videoPath),
-//           'video/webm'
-//       );
-//       const traceFileLink = `<a href="https://trace.playwright.dev/">Open ${path}</a>`
-//       await this.attach(`Trace file: ${traceFileLink}`, 'text/html');
-
-//   }
-
-// });
-
-////////////////////
-
+  await context.tracing.start({
+    name: scenarioName,
+    title: pickle.name,
+    sources: true,
+    screenshots: true, snapshots: true
+});
+  page = await context.newPage();
+  pageFixure.page = page;
+  pageFixure.logger= createLogger(options(scenarioName))
+});
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -124,16 +99,14 @@ After(async function ({ pickle, result }) {
   }
 });
 
-///////////////////
-
-
-
-
-
-
-
-
 AfterAll(async () => {
   await browser.close();
  // await pageFixure.logger.close();
 });
+function getStorageState(user: string): string | { cookies: Array<{ name: string; value: string; domain: string; path: string; expires: number; httpOnly: boolean; secure: boolean; sameSite: "Strict" | "Lax" | "None"; }>; origins: Array<{ origin: string; localStorage: Array<{ name: string; value: string; }>; }>; } | undefined {
+  if (user.endsWith("admin"))
+    return "src/helpers/auth/admin.json";
+else if (user.endsWith("lead"))
+    return "src/helpers/auth/lead.json";
+}
+
