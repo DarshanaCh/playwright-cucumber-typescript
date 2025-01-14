@@ -13,24 +13,13 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 16
-    - name: Cache Node.js modules
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Cucumber tests
       run: npm test
-      timeout-minutes: 60
-    - name: Ensure test-results directory exists
-      run: mkdir -p test-results
-    - name: Upload Playwright report
-      uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v3
       if: always()
       with:
         name: Report
