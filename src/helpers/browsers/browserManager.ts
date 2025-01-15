@@ -2,7 +2,7 @@ import { chromium, firefox, LaunchOptions } from "playwright";
 
 const options : LaunchOptions = {
 
-headless: false ,
+headless: true ,
 
 }
 export const invokeBrowser = async()  => {
